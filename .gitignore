@@ -1,0 +1,48 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Android
+android/app/src/main/res/values/strings.xml
+android/local.properties
+android/key.properties
+android/app/src/main/assets/
+android/app/src/main/jniLibs/
+android/app/src/main/res/drawable-*/
+android/app/src/main/res/mipmap-*/
+android/app/src/main/res/values/styles.xml
+android/app/src/main/res/values-v21/styles.xml
+android/app/src/main/res/xml/
+android/app/src/main/res/raw/
+android/app/src/main/res/layout/
+android/app/src/main/res/menu/
+android/app/src/main/res/navigation/
+android/app/src/main/res/anim/
+android/app/src/main/res/animator/
+android/app/src/main/res/transition/
+android/app/src/main/res/interpolator/
+android/app/src/main/res/color/
+android/app/src/main/res/font/
+android/app/src/main/res/mipmap-anydpi-v26/
+android/app/src/main/res/values-night/
+android/app/src/main/res/values-round/
+android/app/src/main/res/values-v24/
+android/app/src/main/res/values-v26/
+android/app/src/main/res/values-v28/
+android/app/src/main/res/values-v31/
+android/app/src/main/res/values-v33/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Misc
+.DS_Store
