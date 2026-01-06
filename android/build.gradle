@@ -16,3 +16,15 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+subprojects {
+    plugins.withId('com.android.library') {
+        if (project.android.namespace == null) {
+            def manifestFile = project.file('src/main/AndroidManifest.xml')
+            if (manifestFile.exists()) {
+                def manifest = new XmlParser().parse(manifestFile)
+                project.android.namespace = manifest.@package
+            }
+        }
+    }
+}
