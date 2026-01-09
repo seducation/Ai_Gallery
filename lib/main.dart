@@ -1,3 +1,4 @@
+import 'package:ai_gallery_app/features/gallery/presentation/album_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -110,12 +111,7 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
         index: _selectedIndex,
         children: const [
           TimelineGallery(),
-          Center(
-            child: Text(
-              'Albums',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+          AlbumView(),
           AIToolsScreen(),
         ],
       ),
@@ -132,5 +128,3 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
     );
   }
 }
-
-
