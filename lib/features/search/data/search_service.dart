@@ -1,4 +1,3 @@
-import 'package:isar/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/database/database_service.dart';
 import '../../gallery/domain/media_item.dart';
@@ -20,10 +19,9 @@ class SearchService extends _$SearchService {
     // For now, we'll simulate it
     final queryEmbedding = List.generate(512, (index) => 0.1);
 
-    final db = ref.read(databaseServiceProvider).value;
-    if (db == null) return [];
+    final dbService = ref.read(databaseServiceProvider.notifier);
 
-    final allMedia = await db.mediaItems.where().findAll();
+    final allMedia = await dbService.getAllMedia();
 
     // Sort by similarity
     allMedia.sort((a, b) {

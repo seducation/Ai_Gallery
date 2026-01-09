@@ -13,31 +13,24 @@ A modern, privacy-focused Gallery app built with Flutter, featuring offline-firs
 - **UI**: Flutter (Material 3)
 - **State Management**: Riverpod (with code generation)
 - **Navigation**: GoRouter
-- **Database**: Isar (NoSQL, high-performance)
+- **Database**: Hive (NoSQL, high-performance)
 - **AI Engine**: Custom modular package using TensorFlow Lite & MediaPipe.
 - **Media Handling**: Photo Manager & FFmpeg.
 
-## 📂 Project Structure
-- `lib/core`: Database services, themes, and global constants.
-- `lib/features/gallery`: Media discovery, grid view, and video AI services.
-- `lib/features/search`: Vector-based search implementation and UI.
-- `lib/features/editor`: AI photo tools and subject extraction.
-- `lib/features/settings`: App configuration and privacy settings.
-- `ai_engine/`: Modular package for on-device AI inference.
+## ✨ Features
+- **Timeline View**: Grouped by day, month, and year.
+- **Album View**: Auto-created albums (Screenshots, Downloads, etc.).
+- **Photo Details**: EXIF data, map view, and labels.
+- **Video Playback**: With basic controls.
+- **Search**: By text (using AI), labels, and location.
+- **AI Editor**: One-tap enhance, subject select, and background erase.
+- **Sharing**: Share photos and videos with other apps.
+- **Dark Mode**: Based on system settings.
 
 ## 🚀 Getting Started
-1. **Prerequisites**:
-   - Flutter SDK (Stable channel)
-   - Android Studio / VS Code
-2. **Setup**:
-   - Run `flutter pub get` in the root directory.
-   - Run `flutter pub get` in the `ai_engine` directory.
-   - Run `dart run build_runner build` to generate necessary code.
-3. **Models**:
-   - Place your `.tflite` models in `assets/models/`.
-   - Update `ai_engine.dart` with your model filenames.
-4. **Run**:
-   - `flutter run`
+1. **Clone the repo**: `git clone [URL]`
+2. **Install dependencies**: `flutter pub get`
+3. **Run the app**: `flutter run`
 
 ## 🧠 AI Engine
 The `ai_engine` package is designed to be model-agnostic:
@@ -47,7 +40,7 @@ The `ai_engine` package is designed to be model-agnostic:
 
 ## 🔐 Privacy & Security
 - **Offline-First**: No internet connection required for core features.
-- **Encrypted Storage**: Private albums are stored using AES encryption (via Isar).
+- **Encrypted Storage**: Private albums are stored using AES encryption (via Hive).
 - **No Analytics**: Zero user tracking or data collection.
 
 ## 📄 License

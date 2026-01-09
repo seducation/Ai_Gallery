@@ -6,7 +6,7 @@ part of 'video_ai_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$videoAiServiceHash() => r'837f90238436e9c33ed2dfc0d265dabd6521b5bb';
+String _$videoAiServiceHash() => r'871934b4b0cc9d9bb4624670a681a9999461c331';
 
 /// See also [VideoAiService].
 @ProviderFor(VideoAiService)

@@ -1,41 +1,50 @@
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 
 part 'media_item.g.dart';
 
-@collection
-class MediaItem {
-  Id id = Isar.autoIncrement;
-
-  @Index(unique: true, replace: true)
+@HiveType(typeId: 0)
+class MediaItem extends HiveObject {
+  @HiveField(0)
   late String localPath;
 
+  @HiveField(1)
   late String fileName;
 
+  @HiveField(2)
   late DateTime dateAdded;
 
+  @HiveField(3)
   late int width;
 
+  @HiveField(4)
   late int height;
 
+  @HiveField(5)
   late int size;
 
-  @Index()
+  @HiveField(6)
   late bool isVideo;
 
+  @HiveField(7)
   String? mimeType;
 
   // AI Metadata
+  @HiveField(8)
   List<double>? embeddings;
 
+  @HiveField(9)
   List<String>? labels;
 
-  @Index()
+  @HiveField(10)
   bool isFavorite = false;
 
-  @Index()
+  @HiveField(11)
   String? albumName;
 
   // Location data
+  @HiveField(12)
   double? latitude;
+
+  @HiveField(13)
   double? longitude;
 }

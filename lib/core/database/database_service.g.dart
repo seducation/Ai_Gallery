@@ -6,12 +6,12 @@ part of 'database_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$databaseServiceHash() => r'be374cb8e456d460afe25dbd9de08042867e7e9b';
+String _$databaseServiceHash() => r'b6c226084f477852cf792baa36f64e22320ee2b2';
 
 /// See also [DatabaseService].
 @ProviderFor(DatabaseService)
 final databaseServiceProvider =
-    AutoDisposeAsyncNotifierProvider<DatabaseService, Isar>.internal(
+    AsyncNotifierProvider<DatabaseService, Box<MediaItem>>.internal(
   DatabaseService.new,
   name: r'databaseServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final databaseServiceProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$DatabaseService = AutoDisposeAsyncNotifier<Isar>;
+typedef _$DatabaseService = AsyncNotifier<Box<MediaItem>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
