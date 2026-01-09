@@ -43883,7 +43883,7 @@ G(a){var s,r,q=this,p=null,o=q.a6j(a),n=A.a9C(B.l)
 n=new A.nO(n.a,n.b,n.c,0.2).C6()
 s=A.hj(40)
 r=t.p
-s=A.c7(p,A.f6(A.b([q.Nw(0,"Photos"),B.Uv,q.Nw(1,"Files")],r),B.N,B.aa,B.aX),B.n,p,new A.cB(n,p,p,s,p,p,B.aj),p,p,B.FR,p)
+s=A.c7(p,A.f6(A.b([q.Nw(0,"Photos"),B.Uv,q.Nw(1,"Albums")],r),B.N,B.aa,B.aX),B.n,p,new A.cB(n,p,p,s,p,p,B.aj),p,p,B.FR,p)
 n=A.a9C(B.l)
 n=new A.nO(n.a,n.b,n.c,0.2).C6()
 return A.j6(!0,A.c7(p,A.f6(A.b([o,B.A6,s,B.A6,A.cP(p,A.c7(p,A.ep(B.jN,q.c===2?B.j:B.L,p,p),B.n,p,new A.cB(n,p,p,p,p,p,B.cD),56,p,p,56),B.z,!1,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,p,new A.a5k(q),p,p,p,p,p,p,!1,B.X)],r),B.N,B.cl,B.ad),B.n,p,p,70,B.FI,p,p),B.a9,!0)},
