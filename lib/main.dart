@@ -84,29 +84,6 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          'Photos',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white, size: 28),
-            onPressed: () => context.push('/search'),
-          ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white, size: 28),
-            onPressed: () => context.push('/settings'),
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
       body: IndexedStack(
         index: _selectedIndex,
         children: const [

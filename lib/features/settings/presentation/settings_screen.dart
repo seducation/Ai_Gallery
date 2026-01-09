@@ -10,7 +10,6 @@ class SettingsScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: [
           ListTile(
