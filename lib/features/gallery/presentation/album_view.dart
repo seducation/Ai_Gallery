@@ -1,11 +1,4 @@
-# AlbumView – UI STRUCTURE ONLY (SAFE / NO LOGIC)
 
-> ⚠️ This file is **UI‑ONLY**. No file access, no Kotlin/native deps, no MediaItem assumptions.
-> Purpose: **visual review first**, logic will be connected later.
-
----
-
-```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
