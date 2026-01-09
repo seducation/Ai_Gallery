@@ -26,7 +26,11 @@ class AlbumView extends StatelessWidget {
           const SizedBox(height: 16),
           _categoryGrid(),
           const SizedBox(height: 24),
+          _sectionTitle('Your Albums'),
+          _userAlbumsRow(),
+          const SizedBox(height: 24),
           _sectionTitle('Albums'),
+
           _albumTile('Camera', 245),
           _albumTile('WhatsApp Images', 120),
           _albumTile('Screenshots', 89, locked: true),
@@ -76,6 +80,21 @@ class AlbumView extends StatelessWidget {
     );
   }
 
+  Widget _userAlbumsRow() {
+    return SizedBox(
+      height: 140,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: const [
+          _UserAlbumTile(create: true),
+          _UserAlbumTile(name: 'Travel'),
+          _UserAlbumTile(name: 'Family'),
+          _UserAlbumTile(name: 'Work'),
+        ],
+      ),
+    );
+  }
+
   Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -99,6 +118,39 @@ class AlbumView extends StatelessWidget {
       title: Text(name),
       trailing: const Icon(Icons.chevron_right),
       onTap: () {},
+    );
+  }
+}
+
+class _UserAlbumTile extends StatelessWidget {
+  final String? name;
+  final bool create;
+
+  const _UserAlbumTile({this.name, this.create = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12),
+      child: SizedBox(
+        width: 110,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(create ? Icons.add : Icons.folder, size: 32),
+              const SizedBox(height: 8),
+              Text(create ? 'Create Album' : name!, textAlign: TextAlign.center),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
