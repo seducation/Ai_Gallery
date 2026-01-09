@@ -124,3 +124,12 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
     );
   }
 }
+CustomBottomNav(
+  selectedIndex: _currentIndex,
+  onItemSelected: (index) => setState(() => _currentIndex = index),
+  onFilterChanged: (filter) {
+    print("Selected filter: $filter");
+    // Update your list of files here based on the filter
+  },
+)
+
