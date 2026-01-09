@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
-// Enum to manage the filter state
-enum FileFilter { onlyPhoto, onlyVideo, allFiles, photoAndVideo }
+enum GalleryFilter {
+  photos,
+  videos,
+  all,
+  photosAndVideos,
+}
 
-class CustomBottomNav extends StatefulWidget {
+class CustomBottomNav extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
-  final Function(FileFilter) onFilterChanged; // Callback for filtering logic
+  final ValueChanged<GalleryFilter> onFilterChanged;
 
   const CustomBottomNav({
     super.key,
@@ -14,13 +18,6 @@ class CustomBottomNav extends StatefulWidget {
     required this.onItemSelected,
     required this.onFilterChanged,
   });
-
-  @override
-  State<CustomBottomNav> createState() => _CustomBottomNavState();
-}
-
-class _CustomBottomNavState extends State<CustomBottomNav> {
-  FileFilter _currentFilter = FileFilter.allFiles;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +28,10 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // 🔽 Filter Button (Left side)
+            _buildFilterButton(context),
+            const SizedBox(width: 12),
+
             // Main Navigation Capsule
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -48,58 +49,75 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
               ),
             ),
             const SizedBox(width: 12),
-            
-            // Filter Button with Toggle Menu
-            _buildFilterMenu(),
+
+            // ☰ Menu Button (Right side)
+            GestureDetector(
+              onTap: () => onItemSelected(2),
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.menu,
+                  color: selectedIndex == 2 ? Colors.white : Colors.white70,
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildFilterMenu() {
-    return Theme(
-      // This removes the default padding from the popup menu for a cleaner look
-      data: Theme.of(context).copyWith(
-        hoverColor: Colors.transparent,
-        splashColor: Colors.transparent,
-      ),
-      child: PopupMenuButton<FileFilter>(
-        initialValue: _currentFilter,
-        icon: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.2),
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.tune_rounded, // Better "filter/tune" icon
-            color: Colors.white,
-          ),
+  // ================= FILTER MENU =================
+
+  Widget _buildFilterButton(BuildContext context) {
+    return PopupMenuButton<GalleryFilter>(
+      onSelected: onFilterChanged,
+      color: Colors.black87,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      itemBuilder: (context) => const [
+        PopupMenuItem(
+          value: GalleryFilter.photos,
+          child: _FilterItem('Only Photos'),
         ),
-        offset: const Offset(0, -220), // Adjust this to make the menu pop "up"
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        onSelected: (FileFilter result) {
-          setState(() {
-            _currentFilter = result;
-          });
-          widget.onFilterChanged(result);
-        },
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<FileFilter>>[
-          const PopupMenuItem(value: FileFilter.onlyPhoto, child: Text('Only Photo')),
-          const PopupMenuItem(value: FileFilter.onlyVideo, child: Text('Only Video')),
-          const PopupMenuItem(value: FileFilter.allFiles, child: Text('All Files')),
-          const PopupMenuItem(value: FileFilter.photoAndVideo, child: Text('Photo and Video')),
-        ],
+        PopupMenuItem(
+          value: GalleryFilter.videos,
+          child: _FilterItem('Only Videos'),
+        ),
+        PopupMenuItem(
+          value: GalleryFilter.all,
+          child: _FilterItem('All Files'),
+        ),
+        PopupMenuItem(
+          value: GalleryFilter.photosAndVideos,
+          child: _FilterItem('Photos & Videos'),
+        ),
+      ],
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.2),
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          Icons.filter_list,
+          color: Colors.white70,
+        ),
       ),
     );
   }
 
+  // ================= NAV ITEM =================
+
   Widget _buildNavItem(int index, String label) {
-    final isSelected = widget.selectedIndex == index;
+    final isSelected = selectedIndex == index;
     return GestureDetector(
-      onTap: () => widget.onItemSelected(index),
+      onTap: () => onItemSelected(index),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         decoration: BoxDecoration(
@@ -118,3 +136,70 @@ class _CustomBottomNavState extends State<CustomBottomNav> {
     );
   }
 }
+
+class _FilterItem extends StatelessWidget {
+  final String text;
+  const _FilterItem(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(color: Colors.white, fontSize: 14),
+    );
+  }
+}
+
+
+Done ✅
+I’ve added a filter icon on the left, matching the same circular UI as the hamburger/menu icon on the right.
+
+✨ What you now have
+
+Left filter button (Icons.filter_list)
+
+Popup toggle menu (same style as hamburger)
+
+Filter options:
+
+1. Only Photos
+
+
+2. Only Videos
+
+
+3. All Files
+
+
+4. Photos & Videos
+
+
+
+
+🔧 How to use it in GalleryHomeScreen
+
+You already referenced onFilterChanged, now just handle it:
+
+CustomBottomNav(
+  selectedIndex: _selectedIndex,
+  onItemSelected: (index) {
+    setState(() => _selectedIndex = index);
+  },
+  onFilterChanged: (filter) {
+    // Example handling
+    switch (filter) {
+      case GalleryFilter.photos:
+        // show only photos
+        break;
+      case GalleryFilter.videos:
+        // show only videos
+        break;
+      case GalleryFilter.all:
+        // show everything
+        break;
+      case GalleryFilter.photosAndVideos:
+        // show both
+        break;
+    }
+  },
+)
