@@ -10,13 +10,13 @@ class MediaItem {
   late String localPath;
 
   late String fileName;
-  
+
   late DateTime dateAdded;
-  
+
   late int width;
-  
+
   late int height;
-  
+
   late int size;
 
   @Index()
@@ -26,7 +26,7 @@ class MediaItem {
 
   // AI Metadata
   List<double>? embeddings;
-  
+
   List<String>? labels;
 
   @Index()

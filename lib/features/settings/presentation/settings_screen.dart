@@ -17,8 +17,11 @@ class SettingsScreen extends ConsumerWidget {
             title: const Text('Theme Mode'),
             subtitle: Text(themeMode.toString().split('.').last),
             trailing: IconButton(
-              icon: Icon(themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode),
-              onPressed: () => ref.read(themeNotifierProvider.notifier).toggleTheme(),
+              icon: Icon(themeMode == ThemeMode.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode),
+              onPressed: () =>
+                  ref.read(themeNotifierProvider.notifier).toggleTheme(),
             ),
           ),
           const Divider(),

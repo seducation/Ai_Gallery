@@ -15,7 +15,9 @@ class TimelineGallery extends ConsumerWidget {
     return mediaAsync.when(
       data: (items) {
         if (items.isEmpty) {
-          return const Center(child: Text('No media found', style: TextStyle(color: Colors.white)));
+          return const Center(
+              child: Text('No media found',
+                  style: TextStyle(color: Colors.white)));
         }
 
         // Group items by date
@@ -82,9 +84,13 @@ class TimelineGallery extends ConsumerWidget {
     final now = DateTime.now();
     final yesterday = DateTime.now().subtract(const Duration(days: 1));
 
-    if (date.year == now.year && date.month == now.month && date.day == now.day) {
+    if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day) {
       return 'Today';
-    } else if (date.year == yesterday.year && date.month == yesterday.month && date.day == yesterday.day) {
+    } else if (date.year == yesterday.year &&
+        date.month == yesterday.month &&
+        date.day == yesterday.day) {
       return 'Yesterday';
     } else {
       return DateFormat('d MMM yyyy').format(date);

@@ -18,10 +18,11 @@ class SubjectExtractionService extends _$SubjectExtractionService {
   Future<File?> extractSubject(File imageFile) async {
     // Placeholder for SAM (Segment Anything Model) Lite or MediaPipe Selfie Segmentation
     final directory = await getTemporaryDirectory();
-    final outputPath = p.join(directory.path, 'subject_${p.basename(imageFile.path)}.png');
-    
+    final outputPath =
+        p.join(directory.path, 'subject_${p.basename(imageFile.path)}.png');
+
     await Future.delayed(const Duration(seconds: 2));
-    
+
     // In a real app, this would return a PNG with transparent background
     return imageFile.copy(outputPath);
   }

@@ -19,11 +19,12 @@ class EditorService extends _$EditorService {
     // Placeholder for AI enhancement logic
     // In a real app, this would call a TFLite model for color/contrast correction
     final directory = await getTemporaryDirectory();
-    final outputPath = p.join(directory.path, 'enhanced_${p.basename(imageFile.path)}');
-    
+    final outputPath =
+        p.join(directory.path, 'enhanced_${p.basename(imageFile.path)}');
+
     // Simulate processing time
     await Future.delayed(const Duration(seconds: 1));
-    
+
     // For now, just copy the file as a placeholder
     return imageFile.copy(outputPath);
   }
@@ -31,8 +32,9 @@ class EditorService extends _$EditorService {
   Future<File?> remaster(File imageFile) async {
     // Placeholder for Super-Resolution / Noise Removal
     final directory = await getTemporaryDirectory();
-    final outputPath = p.join(directory.path, 'remastered_${p.basename(imageFile.path)}');
-    
+    final outputPath =
+        p.join(directory.path, 'remastered_${p.basename(imageFile.path)}');
+
     await Future.delayed(const Duration(seconds: 2));
     return imageFile.copy(outputPath);
   }
