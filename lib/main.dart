@@ -126,9 +126,11 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
         },
         onFilterChanged: (filter) {
           debugPrint('Selected filter: $filter');
-          // Apply filter to gallery data source here
+          // TODO: connect this to gallery provider/filter logic
         },
       ),
     );
   }
 }
+
+
