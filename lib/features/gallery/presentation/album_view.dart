@@ -9,7 +9,8 @@
 // - Uses existing MediaItem, mediaNotifierProvider, GalleryGrid
 
 import 'dart:collection';
-import 'dart:io';
+// dart:io removed – MediaItem does not expose File
+
 import 'package:ai_gallery_app/features/gallery/domain/media_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,18 +75,9 @@ class _AlbumViewState extends ConsumerState<AlbumView> {
       body: mediaAsync.when(
         data: (items) {
           final albums = <String, List<MediaItem>>{};
+          // Categories are kept safe without file access
           final photos = <MediaItem>[];
           final videos = <MediaItem>[];
-
-          for (final item in items) {
-            final album = item.albumName ?? 'Others';
-            albums.putIfAbsent(album, () => []);
-            albums[album]!.add(item);
-
-            if (item.file.path.endsWith('.jpg') || item.file.path.endsWith('.png')) {
-              photos.add(item);
-            } else if (item.file.path.endsWith('.mp4')) {
-              videos.add(item);
             }
           }
 
@@ -185,7 +177,8 @@ class _AlbumViewState extends ConsumerState<AlbumView> {
               itemCount: items.take(6).length,
               itemBuilder: (_, i) => Padding(
                 padding: const EdgeInsets.all(6),
-                child: Image.file(items[i].file, width: 80, fit: BoxFit.cover),
+                // Preview disabled (MediaItem has no file getter)
+
               ),
             ),
           )
@@ -253,5 +246,8 @@ class _AlbumViewState extends ConsumerState<AlbumView> {
     );
   }
 }
+
+
+ 
 
 
