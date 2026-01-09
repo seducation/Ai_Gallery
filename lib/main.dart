@@ -1,93 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'features/gallery/presentation/timeline_gallery.dart';
-import 'features/search/presentation/search_screen.dart';
-import 'features/editor/presentation/ai_tools_screen.dart';
-import 'features/settings/presentation/settings_screen.dart';
-import 'shared/widgets/custom_bottom_nav.dart';
-import 'core/theme/theme_service.dart';
+// ... existing imports ...
+// Ensure you import FileFilter if it's in a different file
 
-void main() {
-  runApp(
-    const ProviderScope(
-      child: AIGalleryApp(),
-    ),
-  );
-}
-
-final _router = GoRouter(
-  initialLocation: '/',
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const GalleryHomeScreen(),
-    ),
-    GoRoute(
-      path: '/search',
-      builder: (context, state) => const SearchScreen(),
-    ),
-    GoRoute(
-      path: '/settings',
-      builder: (context, state) => const SettingsScreen(),
-    ),
-  ],
-);
-
-class AIGalleryApp extends ConsumerWidget {
-  const AIGalleryApp({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeNotifierProvider);
-
-    return MaterialApp.router(
-      title: 'AI Gallery',
-      themeMode: themeMode,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-        ),
-        useMaterial3: true,
-        scaffoldBackgroundColor: Colors.white,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-        scaffoldBackgroundColor: Colors.black,
-      ),
-      routerConfig: _router,
-    );
-  }
-}
-
-class GalleryHomeScreen extends StatefulWidget {
+class GalleryHomeScreen extends ConsumerStatefulWidget { // Changed to ConsumerStatefulWidget
   const GalleryHomeScreen({super.key});
 
   @override
-  State<GalleryHomeScreen> createState() => _GalleryHomeScreenState();
+  ConsumerState<GalleryHomeScreen> createState() => _GalleryHomeScreenState();
 }
 
-class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
-  int _selectedIndex = 0;
+class _GalleryHomeScreenState extends ConsumerState<GalleryHomeScreen> {
+  int _selectedIndex = 0; // Keeping track of the bottom nav tab
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      // Using a Stack or Container background if you want the "Glass" look for the AppBar
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Photos',
-          style: TextStyle(
+        title: Text(
+          _selectedIndex == 0 ? 'Photos' : (_selectedIndex == 1 ? 'Albums' : 'AI Tools'),
+          style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -114,14 +48,17 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
         ],
       ),
       bottomNavigationBar: CustomBottomNav(
-  selectedIndex: _currentIndex,
-  onItemSelected: (index) => setState(() => _currentIndex = index),
-  onFilterChanged: (filter) {
-    print("Selected filter: $filter");
-    // Update your list of files here based on the filter
-  },
-)
-
-
-
-     
+        selectedIndex: _selectedIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        onFilterChanged: (filter) {
+          // Update the Riverpod provider so TimelineGallery can react
+          ref.read(galleryFilterProvider.notifier).state = filter;
+        },
+      ),
+    );
+  }
+}
