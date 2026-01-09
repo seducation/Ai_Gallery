@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 
-class CustomBottomNav extends StatelessWidget {
+// Enum to manage the filter state
+enum FileFilter { onlyPhoto, onlyVideo, allFiles, photoAndVideo }
+
+class CustomBottomNav extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
+  final Function(FileFilter) onFilterChanged; // Callback for filtering logic
 
   const CustomBottomNav({
     super.key,
     required this.selectedIndex,
     required this.onItemSelected,
+    required this.onFilterChanged,
   });
+
+  @override
+  State<CustomBottomNav> createState() => _CustomBottomNavState();
+}
+
+class _CustomBottomNavState extends State<CustomBottomNav> {
+  FileFilter _currentFilter = FileFilter.allFiles;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +35,7 @@ class CustomBottomNav extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.2), // Translucent grey background
+                color: Colors.black.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Row(
@@ -36,32 +48,58 @@ class CustomBottomNav extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // Menu Button (Right side)
-            GestureDetector(
-              onTap: () => onItemSelected(2),
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.menu,
-                  color: selectedIndex == 2 ? Colors.white : Colors.white70,
-                ),
-              ),
-            ),
+            
+            // Filter Button with Toggle Menu
+            _buildFilterMenu(),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildFilterMenu() {
+    return Theme(
+      // This removes the default padding from the popup menu for a cleaner look
+      data: Theme.of(context).copyWith(
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+      ),
+      child: PopupMenuButton<FileFilter>(
+        initialValue: _currentFilter,
+        icon: Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2),
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.tune_rounded, // Better "filter/tune" icon
+            color: Colors.white,
+          ),
+        ),
+        offset: const Offset(0, -220), // Adjust this to make the menu pop "up"
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        onSelected: (FileFilter result) {
+          setState(() {
+            _currentFilter = result;
+          });
+          widget.onFilterChanged(result);
+        },
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<FileFilter>>[
+          const PopupMenuItem(value: FileFilter.onlyPhoto, child: Text('Only Photo')),
+          const PopupMenuItem(value: FileFilter.onlyVideo, child: Text('Only Video')),
+          const PopupMenuItem(value: FileFilter.allFiles, child: Text('All Files')),
+          const PopupMenuItem(value: FileFilter.photoAndVideo, child: Text('Photo and Video')),
+        ],
+      ),
+    );
+  }
+
   Widget _buildNavItem(int index, String label) {
-    final isSelected = selectedIndex == index;
+    final isSelected = widget.selectedIndex == index;
     return GestureDetector(
-      onTap: () => onItemSelected(index),
+      onTap: () => widget.onItemSelected(index),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         decoration: BoxDecoration(
