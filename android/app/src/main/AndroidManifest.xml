@@ -3,9 +3,7 @@
 
     <application
         android:label="ai_gallery_app"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:theme="@style/LaunchTheme">
+        android:name="${applicationName}">
 
         <activity
             android:name=".MainActivity"
@@ -16,10 +14,9 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
 
-            <!-- Flutter normal theme -->
-            <meta-data
-                android:name="io.flutter.embedding.android.NormalTheme"
-                android:resource="@style/NormalTheme" />
+            <!-- IMPORTANT: REMOVE theme references -->
+            <!-- No LaunchTheme -->
+            <!-- No NormalTheme -->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,18 +25,10 @@
 
         </activity>
 
-        <!-- Flutter embedding -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
 
     </application>
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT"/>
-            <data android:mimeType="text/plain"/>
-        </intent>
-    </queries>
 
 </manifest>
