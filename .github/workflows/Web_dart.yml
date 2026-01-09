@@ -13,15 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout code
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Set up Flutter 3.16.x (Dart 3.6+)
+      # 2️⃣ Set up Flutter 3.27.4 (Dart 3.6.x)
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.16.1"  # stable version with Dart 3.6+
+          flutter-version: "3.27.4"
           channel: stable
 
       # 3️⃣ Verify Flutter & Dart versions
