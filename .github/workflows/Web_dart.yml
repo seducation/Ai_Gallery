@@ -1,4 +1,4 @@
-name: Build Flutter Web
+name: Build and Deploy Flutter Web
 
 on:
   push:
@@ -6,33 +6,46 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write   # Required for deploying to GitHub Pages
 
 jobs:
   build-web:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # 1️⃣ Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Set up Flutter 3.16.x (Dart 3.6+)
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.13.5"
+          flutter-version: "3.16.1"  # stable version with Dart 3.6+
           channel: stable
 
-      - name: Flutter Doctor
-        run: flutter doctor -v
+      # 3️⃣ Verify Flutter & Dart versions
+      - name: Flutter & Dart versions
+        run: flutter --version
 
+      # 4️⃣ Cache pub dependencies
+      - name: Cache Pub dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+
+      # 5️⃣ Install dependencies
       - name: Get dependencies
         run: flutter pub get
 
+      # 6️⃣ Build Flutter Web for GitHub Pages
       - name: Build Flutter Web
         run: |
           flutter clean
           flutter build web --release --base-href "/${{ github.event.repository.name }}/"
 
+      # 7️⃣ Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
