@@ -1,152 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-enum GalleryFilter {
-  photos,
-  videos,
-  all,
-  photosAndVideos,
+import 'features/gallery/presentation/timeline_gallery.dart';
+import 'features/search/presentation/search_screen.dart';
+import 'features/editor/presentation/ai_tools_screen.dart';
+import 'features/settings/presentation/settings_screen.dart';
+import 'shared/widgets/custom_bottom_nav.dart';
+import 'core/theme/theme_service.dart';
+
+void main() {
+  runApp(
+    const ProviderScope(
+      child: AIGalleryApp(),
+    ),
+  );
 }
 
-class CustomBottomNav extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onItemSelected;
-  final ValueChanged<GalleryFilter> onFilterChanged;
+final GoRouter _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const GalleryHomeScreen(),
+    ),
+    GoRoute(
+      path: '/search',
+      builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingsScreen(),
+    ),
+  ],
+);
 
-  const CustomBottomNav({
-    super.key,
-    required this.selectedIndex,
-    required this.onItemSelected,
-    required this.onFilterChanged,
-  });
+class AIGalleryApp extends ConsumerWidget {
+  const AIGalleryApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeNotifierProvider);
+
+    return MaterialApp.router(
+      title: 'AI Gallery',
+      debugShowCheckedModeBanner: false,
+      themeMode: themeMode,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
+        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.black,
+      ),
+      routerConfig: _router,
+    );
+  }
+}
+
+class GalleryHomeScreen extends StatefulWidget {
+  const GalleryHomeScreen({super.key});
+
+  @override
+  State<GalleryHomeScreen> createState() => _GalleryHomeScreenState();
+}
+
+class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        height: 70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // 🔽 Filter Button (Left side)
-            _buildFilterButton(context),
-            const SizedBox(width: 12),
-
-            // Main Navigation Capsule
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildNavItem(0, 'Photos'),
-                  const SizedBox(width: 4),
-                  _buildNavItem(1, 'Albums'),
-                ],
-              ),
-            ),
-            const SizedBox(width: 12),
-
-            // ☰ Menu Button (Right side)
-            GestureDetector(
-              onTap: () => onItemSelected(2),
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.menu,
-                  color: selectedIndex == 2 ? Colors.white : Colors.white70,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ================= FILTER MENU =================
-
-  Widget _buildFilterButton(BuildContext context) {
-    return PopupMenuButton<GalleryFilter>(
-      onSelected: onFilterChanged,
-      color: Colors.black87,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      itemBuilder: (context) => const [
-        PopupMenuItem(
-          value: GalleryFilter.photos,
-          child: _FilterItem('Only Photos'),
-        ),
-        PopupMenuItem(
-          value: GalleryFilter.videos,
-          child: _FilterItem('Only Videos'),
-        ),
-        PopupMenuItem(
-          value: GalleryFilter.all,
-          child: _FilterItem('All Files'),
-        ),
-        PopupMenuItem(
-          value: GalleryFilter.photosAndVideos,
-          child: _FilterItem('Photos & Videos'),
-        ),
-      ],
-      child: Container(
-        width: 56,
-        height: 56,
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.2),
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.filter_list,
-          color: Colors.white70,
-        ),
-      ),
-    );
-  }
-
-  // ================= NAV ITEM =================
-
-  Widget _buildNavItem(int index, String label) {
-    final isSelected = selectedIndex == index;
-    return GestureDetector(
-      onTap: () => onItemSelected(index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Text(
-          label,
+    return Scaffold(
+      extendBody: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Photos',
           style: TextStyle(
-            color: isSelected ? Colors.black : Colors.white,
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.white, size: 28),
+            onPressed: () => context.push('/search'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.white, size: 28),
+            onPressed: () => context.push('/settings'),
+          ),
+          const SizedBox(width: 8),
+        ],
+      ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: const [
+          TimelineGallery(),
+          Center(
+            child: Text(
+              'Albums',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          AIToolsScreen(),
+        ],
+      ),
+      bottomNavigationBar: CustomBottomNav(
+        selectedIndex: _selectedIndex,
+        onItemSelected: (index) {
+          setState(() => _selectedIndex = index);
+        },
+        onFilterChanged: (filter) {
+          debugPrint('Selected filter: $filter');
+          // Apply filter to gallery data source here
+        },
       ),
     );
   }
 }
-
-class _FilterItem extends StatelessWidget {
-  final String text;
-  const _FilterItem(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(color: Colors.white, fontSize: 14),
-    );
-  }
-}
-
