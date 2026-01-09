@@ -114,17 +114,6 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
         ],
       ),
       bottomNavigationBar: CustomBottomNav(
-        selectedIndex: _selectedIndex,
-        onItemSelected: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
-    );
-  }
-}
-CustomBottomNav(
   selectedIndex: _currentIndex,
   onItemSelected: (index) => setState(() => _currentIndex = index),
   onFilterChanged: (filter) {
@@ -133,3 +122,6 @@ CustomBottomNav(
   },
 )
 
+
+
+     
