@@ -1,128 +1,135 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AlbumView extends ConsumerWidget {
+/// UI-ONLY AlbumView
+/// Safe to review, no providers, no MediaItem, no native deps
+class AlbumView extends StatelessWidget {
   const AlbumView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Albums'),
+        title: const Text('My Files'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              // TODO: Create Album (UI only)
-            },
-          ),
+          IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {}, // create album
+        child: const Icon(Icons.add),
+      ),
       body: ListView(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         children: [
-          _categorySection(),
+          _storageCard(),
           const SizedBox(height: 16),
-          _albumDropdownSection(),
+          _categoryGrid(),
+          const SizedBox(height: 24),
+          _sectionTitle('Albums'),
+          _albumTile('Camera', 245),
+          _albumTile('WhatsApp Images', 120),
+          _albumTile('Screenshots', 89, locked: true),
+          const SizedBox(height: 16),
+          _sectionTitle('Secure'),
+          _secureTile('Private Safe', Icons.lock),
+          _secureTile('Recently Deleted', Icons.delete),
         ],
       ),
     );
   }
 
-  /// ---------------- CATEGORY GRID ----------------
-  Widget _categorySection() {
+  Widget _storageCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const Text('All files', style: TextStyle(fontWeight: FontWeight.w600)),
+        const SizedBox(height: 12),
+        const Text('60.4 GB / 256 GB', style: TextStyle(fontSize: 28)),
+        const SizedBox(height: 8),
+        const LinearProgressIndicator(value: 0.24),
+      ]),
+    );
+  }
+
+  Widget _categoryGrid() {
     return GridView.count(
-      crossAxisCount: 2,
+      crossAxisCount: 3,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
       children: const [
-        _CategoryTile(icon: Icons.photo, label: 'Photos'),
-        _CategoryTile(icon: Icons.videocam, label: 'Videos'),
-        _CategoryTile(icon: Icons.music_note, label: 'Audio'),
-        _CategoryTile(icon: Icons.description, label: 'Documents'),
-        _CategoryTile(icon: Icons.archive, label: 'Archives'),
-        _CategoryTile(icon: Icons.android, label: 'Apps'),
-        _CategoryTile(icon: Icons.lock, label: 'Private Safe'),
-        _CategoryTile(icon: Icons.delete, label: 'Recently Deleted'),
+        _CategoryTile(icon: Icons.image, label: 'Photos', count: '799'),
+        _CategoryTile(icon: Icons.videocam, label: 'Videos', count: '171'),
+        _CategoryTile(icon: Icons.music_note, label: 'Audio', count: '4'),
+        _CategoryTile(icon: Icons.description, label: 'Documents', count: '53'),
+        _CategoryTile(icon: Icons.android, label: 'APKs', count: '7'),
+        _CategoryTile(icon: Icons.archive, label: 'Archives', count: '11'),
+        _CategoryTile(icon: Icons.apps, label: 'Apps', count: '59'),
       ],
     );
   }
 
-  /// ---------------- ALBUM DROPDOWN ----------------
-  Widget _albumDropdownSection() {
-    return ExpansionTile(
-      title: const Text('My Albums'),
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Widget _albumTile(String name, int count, {bool locked = false}) {
+    return ListTile(
       leading: const Icon(Icons.folder),
-      children: const [
-        _AlbumTile(name: 'Camera', count: 120, locked: false),
-        _AlbumTile(name: 'WhatsApp Images', count: 340, locked: false),
-        _AlbumTile(name: 'Screenshots', count: 58, locked: false),
-        _AlbumTile(name: 'Private Album', count: 12, locked: true),
-      ],
+      title: Text(name),
+      subtitle: Text('$count items'),
+      trailing: locked ? const Icon(Icons.lock, size: 18) : null,
+      onTap: () {},
+    );
+  }
+
+  Widget _secureTile(String name, IconData icon) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(name),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () {},
     );
   }
 }
 
-/// ================= WIDGETS =================
-
 class _CategoryTile extends StatelessWidget {
   final IconData icon;
   final String label;
+  final String count;
 
-  const _CategoryTile({required this.icon, required this.label});
+  const _CategoryTile({required this.icon, required this.label, required this.count});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          // TODO: Navigate later
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 36),
-            const SizedBox(height: 8),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AlbumTile extends StatelessWidget {
-  final String name;
-  final int count;
-  final bool locked;
-
-  const _AlbumTile({
-    required this.name,
-    required this.count,
-    required this.locked,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(locked ? Icons.lock : Icons.folder),
-      title: Text(name),
-      subtitle: Text('$count items'),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: () {
-        // TODO: Open album (locked albums will require auth later)
-      },
+      padding: const EdgeInsets.all(12),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Icon(icon, size: 32),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+        const SizedBox(height: 4),
+        Text(count, style: const TextStyle(color: Colors.grey)),
+      ]),
     );
   }
 }
 
 
- 
+
+
