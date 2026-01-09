@@ -1,12 +1,16 @@
+import 'package:ai_gallery_app/features/gallery/domain/media_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ai_gallery_app/features/gallery/presentation/media_provider.dart';
+import 'package:ai_gallery_app/features/gallery/presentation/gallery_grid.dart';
 
-/// UI-ONLY AlbumView
-/// Safe to review, no providers, no MediaItem, no native deps
-class AlbumView extends StatelessWidget {
+class AlbumView extends ConsumerWidget {
   const AlbumView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mediaAsync = ref.watch(mediaNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Files'),
@@ -19,26 +23,42 @@ class AlbumView extends StatelessWidget {
         onPressed: () {}, // create album
         child: const Icon(Icons.add),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _storageCard(),
-          const SizedBox(height: 16),
-          _categoryGrid(),
-          const SizedBox(height: 24),
-          _sectionTitle('Your Albums'),
-          _userAlbumsRow(),
-          const SizedBox(height: 24),
-          _sectionTitle('Albums'),
+      body: mediaAsync.when(
+        data: (items) {
+          final albums = <String, List<MediaItem>>{};
+          for (var item in items) {
+            final albumName = item.albumName;
+            if (albumName != null) {
+              if (!albums.containsKey(albumName)) {
+                albums[albumName] = [];
+              }
+              albums[albumName]!.add(item);
+            }
+          }
 
-          _albumTile('Camera', 245),
-          _albumTile('WhatsApp Images', 120),
-          _albumTile('Screenshots', 89, locked: true),
-          const SizedBox(height: 16),
-          _sectionTitle('Secure'),
-          _secureTile('Private Safe', Icons.lock),
-          _secureTile('Recently Deleted', Icons.delete),
-        ],
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              _storageCard(),
+              const SizedBox(height: 16),
+              _categoryGrid(),
+              const SizedBox(height: 24),
+              _sectionTitle('Your Albums'),
+              _userAlbumsRow(),
+              const SizedBox(height: 24),
+              _sectionTitle('Albums'),
+              ...albums.entries.map((entry) {
+                return _albumTile(context, entry.key, entry.value);
+              }),
+              const SizedBox(height: 16),
+              _sectionTitle('Secure'),
+              _secureTile('Private Safe', Icons.lock),
+              _secureTile('Recently Deleted', Icons.delete),
+            ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text('Error: $err')),
       ),
     );
   }
@@ -102,13 +122,23 @@ class AlbumView extends StatelessWidget {
     );
   }
 
-  Widget _albumTile(String name, int count, {bool locked = false}) {
+  Widget _albumTile(BuildContext context, String name, List<MediaItem> items, {bool locked = false}) {
     return ListTile(
       leading: const Icon(Icons.folder),
       title: Text(name),
-      subtitle: Text('$count items'),
+      subtitle: Text('${items.length} items'),
       trailing: locked ? const Icon(Icons.lock, size: 18) : null,
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: Text(name)),
+              body: GalleryGrid(items: items),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -181,5 +211,3 @@ class _CategoryTile extends StatelessWidget {
     );
   }
 }
-
-
