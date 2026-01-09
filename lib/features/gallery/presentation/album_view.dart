@@ -1,8 +1,8 @@
 import 'package:ai_gallery_app/features/gallery/domain/media_item.dart';
+import 'package:ai_gallery_app/features/gallery/presentation/gallery_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_gallery_app/features/gallery/presentation/media_provider.dart';
-import 'package:ai_gallery_app/features/gallery/presentation/gallery_grid.dart';
 
 class AlbumView extends ConsumerWidget {
   const AlbumView({super.key});
@@ -24,32 +24,24 @@ class AlbumView extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
       body: mediaAsync.when(
-        data: (items) {
-          final albums = <String, List<MediaItem>>{};
-          for (var item in items) {
-            final albumName = item.albumName;
-            if (albumName != null) {
-              if (!albums.containsKey(albumName)) {
-                albums[albumName] = [];
-              }
-              albums[albumName]!.add(item);
-            }
-          }
+        data: (media) {
+          final photos = media.where((item) => item.path.endsWith('.jpg') || item.path.endsWith('.png')).toList();
+          final videos = media.where((item) => item.path.endsWith('.mp4')).toList();
 
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
               _storageCard(),
               const SizedBox(height: 16),
-              _categoryGrid(),
+              _categoryGrid(context, photos, videos),
               const SizedBox(height: 24),
               _sectionTitle('Your Albums'),
               _userAlbumsRow(),
               const SizedBox(height: 24),
               _sectionTitle('Albums'),
-              ...albums.entries.map((entry) {
-                return _albumTile(context, entry.key, entry.value);
-              }),
+              _albumTile('Camera', 245),
+              _albumTile('WhatsApp Images', 120),
+              _albumTile('Screenshots', 89, locked: true),
               const SizedBox(height: 16),
               _sectionTitle('Secure'),
               _secureTile('Private Safe', Icons.lock),
@@ -81,16 +73,46 @@ class AlbumView extends ConsumerWidget {
     );
   }
 
-  Widget _categoryGrid() {
+  Widget _categoryGrid(BuildContext context, List<MediaItem> photos, List<MediaItem> videos) {
     return GridView.count(
       crossAxisCount: 3,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
-      children: const [
-        _CategoryTile(icon: Icons.image, label: 'Photos', count: '799'),
-        _CategoryTile(icon: Icons.videocam, label: 'Videos', count: '171'),
+      children: [
+        _CategoryTile(
+          icon: Icons.image,
+          label: 'Photos',
+          count: '${photos.length}',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Scaffold(
+                  appBar: AppBar(title: const Text('Photos')),
+                  body: GalleryGrid(items: photos),
+                ),
+              ),
+            );
+          },
+        ),
+        _CategoryTile(
+          icon: Icons.videocam,
+          label: 'Videos',
+          count: '${videos.length}',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Scaffold(
+                  appBar: AppBar(title: const Text('Videos')),
+                  body: GalleryGrid(items: videos),
+                ),
+              ),
+            );
+          },
+        ),
         _CategoryTile(icon: Icons.music_note, label: 'Audio', count: '4'),
         _CategoryTile(icon: Icons.description, label: 'Documents', count: '53'),
         _CategoryTile(icon: Icons.android, label: 'APKs', count: '7'),
@@ -122,23 +144,13 @@ class AlbumView extends ConsumerWidget {
     );
   }
 
-  Widget _albumTile(BuildContext context, String name, List<MediaItem> items, {bool locked = false}) {
+  Widget _albumTile(String name, int count, {bool locked = false}) {
     return ListTile(
       leading: const Icon(Icons.folder),
       title: Text(name),
-      subtitle: Text('${items.length} items'),
+      subtitle: Text('$count items'),
       trailing: locked ? const Icon(Icons.lock, size: 18) : null,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Scaffold(
-              appBar: AppBar(title: Text(name)),
-              body: GalleryGrid(items: items),
-            ),
-          ),
-        );
-      },
+      onTap: () {},
     );
   }
 
@@ -189,25 +201,29 @@ class _CategoryTile extends StatelessWidget {
   final IconData icon;
   final String label;
   final String count;
+  final VoidCallback? onTap;
 
-  const _CategoryTile({required this.icon, required this.label, required this.count});
+  const _CategoryTile({required this.icon, required this.label, required this.count, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(icon, size: 32),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
+          Text(count, style: const TextStyle(color: Colors.grey)),
+        ]),
       ),
-      padding: const EdgeInsets.all(12),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(icon, size: 32),
-        const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-        const SizedBox(height: 4),
-        Text(count, style: const TextStyle(color: Colors.grey)),
-      ]),
     );
   }
 }
