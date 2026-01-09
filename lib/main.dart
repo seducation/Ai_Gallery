@@ -133,32 +133,3 @@ class _GalleryHomeScreenState extends State<GalleryHomeScreen> {
   }
 }
 
-
-I fixed the structure and the runtime issues:
-
-What was corrected
-
-Import → import (Dart is case-sensitive)
-
-Unified state variable: _currentIndex ❌ → _selectedIndex ✅
-
-Ensured CustomBottomNav uses the same index/state
-
-Cleaned router and widget structure (no logic changes)
-
-Minor safety cleanup (debugPrint instead of print)
-
-
-This version will compile cleanly and your bottom navigation will now work as expected.
-
-If you want next:
-
-Bottom-nav + GoRouter sync (URL reflects tab)
-
-Move GalleryHomeScreen to a ShellRoute
-
-Convert GalleryHomeScreen to ConsumerStatefulWidget
-
-
-Just tell me 👍
-
