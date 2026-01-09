@@ -21,7 +21,7 @@ class DatabaseService extends _$DatabaseService {
   Box<MediaItem> get mediaBox => _mediaBox;
 
   Future<void> saveMediaItem(MediaItem item) async {
-    await _mediaBox.put(item.localPath, item);
+    await _mediaBox.put(item.fileName, item);
   }
 
   Future<List<MediaItem>> getAllMedia() async {

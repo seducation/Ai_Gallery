@@ -17,7 +17,7 @@ class MediaItemAdapter extends TypeAdapter<MediaItem> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MediaItem()
-      ..localPath = fields[0] as String
+      ..thumbnailData = fields[0] as Uint8List
       ..fileName = fields[1] as String
       ..dateAdded = fields[2] as DateTime
       ..width = fields[3] as int
@@ -38,7 +38,7 @@ class MediaItemAdapter extends TypeAdapter<MediaItem> {
     writer
       ..writeByte(14)
       ..writeByte(0)
-      ..write(obj.localPath)
+      ..write(obj.thumbnailData)
       ..writeByte(1)
       ..write(obj.fileName)
       ..writeByte(2)

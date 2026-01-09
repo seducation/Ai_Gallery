@@ -37,7 +37,7 @@ class CustomBottomNav extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.2),
+                color: HSLColor.fromColor(Colors.black).withLightness(0.2).toColor(),
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Row(
@@ -58,7 +58,7 @@ class CustomBottomNav extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
+                  color: HSLColor.fromColor(Colors.black).withLightness(0.2).toColor(),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -105,7 +105,7 @@ class CustomBottomNav extends StatelessWidget {
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.2),
+          color: HSLColor.fromColor(Colors.black).withLightness(0.2).toColor(),
           shape: BoxShape.circle,
         ),
         child: const Icon(Icons.filter_list, color: Colors.white70),
@@ -138,5 +138,3 @@ class CustomBottomNav extends StatelessWidget {
     );
   }
 }
-
-

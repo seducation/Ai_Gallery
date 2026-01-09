@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'media_provider.dart';
+part of 'autotagging_service.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mediaNotifierHash() => r'e4005c0a3dacf6c73adbc4a2248105340f2d1507';
+String _$autotaggingServiceHash() =>
+    r'1ca362041a124950a3c06cec72d01d259b162958';
 
-/// See also [MediaNotifier].
-@ProviderFor(MediaNotifier)
-final mediaNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<MediaNotifier, List<MediaItem>>.internal(
-  MediaNotifier.new,
-  name: r'mediaNotifierProvider',
+/// See also [AutotaggingService].
+@ProviderFor(AutotaggingService)
+final autotaggingServiceProvider =
+    AutoDisposeAsyncNotifierProvider<AutotaggingService, void>.internal(
+  AutotaggingService.new,
+  name: r'autotaggingServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$mediaNotifierHash,
+      : _$autotaggingServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MediaNotifier = AutoDisposeAsyncNotifier<List<MediaItem>>;
+typedef _$AutotaggingService = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

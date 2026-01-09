@@ -7,7 +7,7 @@ part of 'subject_extraction_service.dart';
 // **************************************************************************
 
 String _$subjectExtractionServiceHash() =>
-    r'4113beb43d73c74712c3cbcc06fbbff043493695';
+    r'41966ce0ed2057f1387507556c5a4df11056a076';
 
 /// See also [SubjectExtractionService].
 @ProviderFor(SubjectExtractionService)

@@ -1,11 +1,12 @@
 import 'package:hive/hive.dart';
+import 'dart:typed_data';
 
 part 'media_item.g.dart';
 
 @HiveType(typeId: 0)
 class MediaItem extends HiveObject {
   @HiveField(0)
-  late String localPath;
+  late Uint8List thumbnailData;
 
   @HiveField(1)
   late String fileName;
@@ -47,4 +48,7 @@ class MediaItem extends HiveObject {
 
   @HiveField(13)
   double? longitude;
+
+  // Non-Hive fields
+  late String path;
 }

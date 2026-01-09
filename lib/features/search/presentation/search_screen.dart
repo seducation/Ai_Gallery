@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/search_service.dart';
 import '../../gallery/domain/media_item.dart';
-import 'dart:io';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -60,7 +59,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   itemCount: _results.length,
                   itemBuilder: (context, index) {
                     final item = _results[index];
-                    return Image.file(File(item.localPath), fit: BoxFit.cover);
+                    return Image.memory(item.thumbnailData, fit: BoxFit.cover);
                   },
                 ),
     );

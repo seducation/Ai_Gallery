@@ -1,66 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AIToolsScreen extends ConsumerWidget {
+class AIToolsScreen extends StatelessWidget {
   const AIToolsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('AI Tools')),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildToolCard(
-            context,
-            title: 'Auto Enhance',
-            subtitle: 'Automatically adjust colors and contrast',
-            icon: Icons.auto_fix_high,
-            onTap: () {
-              // Logic to pick image and enhance
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildToolCard(
-            context,
-            title: 'AI Remaster',
-            subtitle: 'Super-resolution and noise removal',
-            icon: Icons.high_quality,
-            onTap: () {
-              // Logic to pick image and remaster
-            },
-          ),
-          const SizedBox(height: 16),
-          _buildToolCard(
-            context,
-            title: 'Object Removal',
-            subtitle: 'Remove unwanted objects from photos',
-            icon: Icons.layers_clear,
-            onTap: () {
-              // Logic for inpainting
-            },
-          ),
-        ],
+      appBar: AppBar(title: const Text('AI Photo Editor')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ElevatedButton.icon(
+              onPressed: () => _autoEnhance(context),
+              icon: const Icon(Icons.auto_awesome),
+              label: const Text('Auto Enhance'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => _aiRemaster(context),
+              icon: const Icon(Icons.brush),
+              label: const Text('AI Remaster'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () => _objectRemoval(context),
+              icon: const Icon(Icons.person_remove),
+              label: const Text('Object Removal'),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildToolCard(
-    BuildContext context, {
-    required String title,
-    required String subtitle,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      child: ListTile(
-        leading:
-            Icon(icon, size: 40, color: Theme.of(context).colorScheme.primary),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: onTap,
-      ),
+  void _autoEnhance(BuildContext context) {
+    // Placeholder for Auto Enhance
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Auto Enhance feature is not yet implemented.')),
+    );
+  }
+
+  void _aiRemaster(BuildContext context) {
+    // Placeholder for AI Remaster
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('AI Remaster feature is not yet implemented.')),
+    );
+  }
+
+  void _objectRemoval(BuildContext context) {
+    // Placeholder for Object Removal
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Object Removal feature is not yet implemented.')),
     );
   }
 }

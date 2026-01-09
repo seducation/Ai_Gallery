@@ -1,3 +1,4 @@
+import 'package:ai_gallery_app/features/gallery/data/autotagging_service.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../domain/media_item.dart';
@@ -17,7 +18,7 @@ class MediaNotifier extends _$MediaNotifier {
     if (!ps.isAuth) return [];
 
     final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList(
-      type: RequestType.common,
+      type: RequestType.all,
     );
 
     if (paths.isEmpty) return [];
@@ -28,21 +29,28 @@ class MediaNotifier extends _$MediaNotifier {
     );
 
     final dbService = ref.read(databaseServiceProvider.notifier);
+    final autotaggingService = ref.read(autotaggingServiceProvider.notifier);
     final List<MediaItem> items = [];
 
     for (var entity in entities) {
-      final file = await entity.file;
-      if (file == null) continue;
+      final thumbnailData = await entity.thumbnailDataWithSize(
+        const ThumbnailSize(200, 200), // Request a 200x200 thumbnail
+      );
+      if (thumbnailData == null) continue;
 
-      final item = MediaItem()
-        ..localPath = file.path
+      var item = MediaItem()
+        ..thumbnailData = thumbnailData
         ..fileName = entity.title ?? 'Unknown'
         ..dateAdded = entity.createDateTime
         ..width = entity.width
         ..height = entity.height
-        ..size = await file.length()
+        ..size = entity.size.width.toInt()
         ..isVideo = entity.type == AssetType.video
         ..mimeType = entity.mimeType;
+
+      if (!item.isVideo) {
+        item = await autotaggingService.processImage(item);
+      }
 
       items.add(item);
       await dbService.saveMediaItem(item);
