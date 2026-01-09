@@ -45,7 +45,7 @@ class CustomBottomNav extends StatelessWidget {
                 children: [
                   _buildNavItem(0, 'Photos'),
                   const SizedBox(width: 4),
-                  _buildNavItem(1, 'Files'),
+                  _buildNavItem(1, 'Albums'),
                 ],
               ),
             ),
